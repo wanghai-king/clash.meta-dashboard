@@ -1,7 +1,7 @@
 FROM node:latest as builder
 
 WORKDIR /app
-RUN git clone https://github.com/Dreamacro/clash-dashboard.git .
+RUN git clone https://github.com/MetaCubeX/mihomo.git .
 RUN yarn && yarn run build
 
 # step 2
