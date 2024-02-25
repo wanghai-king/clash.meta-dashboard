@@ -1,8 +1,8 @@
 # Step 1 - Build process
 FROM node:latest as builder
 WORKDIR /app
-RUN RUN git clone https://github.com/MetaCubeX/mihomo.git /app
-RUN RUN ls -la /app
+RUN git clone https://github.com/MetaCubeX/mihomo.git /app
+RUN ls -la /app
 RUN yarn && yarn run build
 
 # Step 2 - Setup our Clash image
