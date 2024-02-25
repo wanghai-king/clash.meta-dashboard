@@ -1,40 +1,28 @@
-FROM node:latest as builder
+# Start from a base image
+FROM metacubex/mihomo:latest
 
-WORKDIR /app
-RUN git clone https://github.com/haishanh/yacd.git .
-RUN yarn && yarn run build
+# Combined RUN Commands
+RUN mkdir -p /preset-conf /root/.config/clash /ui && \
+    apk add --no-cache darkhttpd iptables net-tools curl && \
+    wget -P /ui https://github.com/haishanh/yacd/releases/download/v0.3.8/yacd.tar.xz && \
+    tar -xJf /ui/yacd.tar.xz -C /ui --strip-components=1 && \
+    rm /ui/yacd.tar.xz
 
-# step 2
-
-FROM  metacubex/mihomo:latest
-
-RUN mkdir -p /preset-conf \
-    && mkdir -p /root/.config/clash \
-    && apk add --no-cache darkhttpd iptables net-tools curl vim
-
-COPY --from=builder /app/dist /ui
-
-RUN cd \
-    && wget https://github.com/haishanh/yacd/archive/gh-pages.zip \
-    # 解压缩并且把目录名改成 dashboard
-    && unzip gh-pages.zip \
-    && rm -rf gh-pages.zip \
-    && mv yacd-gh-pages/ /dashboard
-
+# Copy files
 COPY files/config.yaml /preset-conf/config.yaml
-
 COPY files/start.sh /start.sh
+RUN ls -la /preset-conf && ls -la /
+
+# Modify file permissions
 RUN chmod +x /start.sh
 
+# Set the volume, working directory, and exposed ports
 VOLUME ["/root/.config/clash"]
-
 WORKDIR /
-EXPOSE 7890
-EXPOSE 7891
-EXPOSE 9090
-EXPOSE 80
+EXPOSE 7890 7891 9090 80
 
-ENTRYPOINT []
-
+# Set the start-up script
 CMD ["/start.sh"]
-HEALTHCHECK --interval=5s --timeout=1s CMD ps | grep darkhttpd | grep -v grep || exit 1
+
+# Healthcheck
+HEALTHCHECK --interval=600s --timeout=1s CMD ps | grep darkhttpd | grep -v grep || exit 1
