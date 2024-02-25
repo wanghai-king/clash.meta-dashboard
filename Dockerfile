@@ -8,8 +8,6 @@ RUN yarn && yarn run build
 
 FROM  dreamacro/clash:latest
 
-LABEL maintainer "zyao89 <zyao89@gmail.com>"
-
 RUN mkdir -p /preset-conf \
     && mkdir -p /root/.config/clash \
     && apk add --no-cache darkhttpd iptables net-tools curl vim
@@ -39,4 +37,4 @@ EXPOSE 80
 ENTRYPOINT []
 
 CMD ["/start.sh"]
-HEALTHCHECK --interval=5s --timeout=1s CMD ps | grep darkhttpd | grep -v grep || exit 1
+HEALTHCHECK --interval=600s --timeout=1s CMD ps | grep darkhttpd | grep -v grep || exit 1
