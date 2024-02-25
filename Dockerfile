@@ -1,31 +1,40 @@
-# Use a prebuilt image of mihomo as builder
-FROM metacubex/mihomo:latest as builder
+FROM node:latest as builder
 
-# Copy the necessary files and directories
-COPY --from=builder /app/dist /ui
+WORKDIR /app
+RUN git clone https://github.com/haishanh/yacd.git .
+RUN yarn && yarn run build
 
-# Setup for Clash image
-FROM dreamacro/clash:latest
-RUN mkdir -p /preset-conf /root/.config/clash \
+# step 2
+
+FROM  metacubex/mihomo:latest
+
+RUN mkdir -p /preset-conf \
+    && mkdir -p /root/.config/clash \
     && apk add --no-cache darkhttpd iptables net-tools curl vim
 
-# Copy files from the builder image
-COPY --from=builder /ui /ui
-COPY files/config.yaml /preset-conf/config.yaml
-COPY files/start.sh /start.sh
+COPY --from=builder /app/dist /ui
 
-# Modify file permissions for scripts
+RUN cd \
+    && wget https://github.com/haishanh/yacd/archive/gh-pages.zip \
+    # 解压缩并且把目录名改成 dashboard
+    && unzip gh-pages.zip \
+    && rm -rf gh-pages.zip \
+    && mv yacd-gh-pages/ /dashboard
+
+COPY files/config.yaml /preset-conf/config.yaml
+
+COPY files/start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Download and extract Dashboard
-ADD https://github.com/haishanh/yacd/releases/download/v0.3.8/yacd.tar.xz /dashboard
-RUN tar -xJf /dashboard/yacd.tar.xz -C /dashboard --strip-components=1 \
-    && rm -f /dashboard/yacd.tar.xz
-
-# Set the volume, working directory, and exposed ports
 VOLUME ["/root/.config/clash"]
-WORKDIR /
-EXPOSE 7890 7891 9090 80
 
-# Set the start-up script
+WORKDIR /
+EXPOSE 7890
+EXPOSE 7891
+EXPOSE 9090
+EXPOSE 80
+
+ENTRYPOINT []
+
 CMD ["/start.sh"]
+HEALTHCHECK --interval=5s --timeout=1s CMD ps | grep darkhttpd | grep -v grep || exit 1
