@@ -6,6 +6,7 @@ RUN git clone https://github.com/haishanh/yacd.git .
 RUN npm i -g pnpm
 RUN pnpm i 
 RUN pnpm run build
+RUN ls -la /app
 
 FROM metacubex/mihomo:latest
 
