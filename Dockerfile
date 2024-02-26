@@ -10,5 +10,5 @@ RUN set -e \
 # Start from a base image
 FROM metacubex/mihomo:latest
 
-COPY config.yml /root/.config/clash/
+COPY files/config.yaml /root/.config/mihomo/
 COPY --from=builder /app/dist /ui
