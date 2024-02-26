@@ -23,4 +23,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: qwezxcjkl/clash.meta-dashboard:latest
+          tags: qwezxcjkl/mihomo-dashboard:latest
