@@ -10,5 +10,15 @@ RUN ls -la /app/public
 
 FROM metacubex/mihomo:latest
 
+# 安装Nginx
+RUN apt-get update && apt-get install -y nginx
+
+# 复制你的文件和配置
 COPY files/config.yaml /root/.config/mihomo/
-COPY --from=builder /app/public /ui
+COPY --from=builder /app/public /ui  
+
+# 复制你的Nginx配置文件到默认位置
+COPY nginx-default.conf /etc/nginx/nginx.conf
+
+# 启动Nginx
+CMD ["nginx", "-g", "daemon off;"]
