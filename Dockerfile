@@ -11,7 +11,7 @@ RUN ls -la /app/public
 FROM metacubex/mihomo:latest
 
 # 安装Nginx
-RUN apk update && apk add nginx
+RUN apk update && apk add nginx brotli
 
 # 复制你的文件和配置
 COPY files/config.yaml /root/.config/mihomo/
