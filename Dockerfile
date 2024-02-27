@@ -23,11 +23,5 @@ RUN apk add --no-cache nginx \
 # 复制Nginx配置文件
 COPY nginx-default.conf /etc/nginx/http.d/default.conf
 
-# 暴露Nginx运行时监听的端口
-EXPOSE 80
-
-# 强制删除默认的Nginx配置文件（如果存在）
-RUN rm -f /etc/nginx/conf.d/default.conf
-
-# 以前台模式启动Nginx
-CMD ["nginx", "-g", "daemon off;"]
+COPY start-nginx.sh /start-nginx.sh
+CMD ["/start-nginx.sh"]
