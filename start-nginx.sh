@@ -1,4 +1,3 @@
 #!/bin/sh
-# start-nginx.sh
-# 以守护进程模式关闭启动 nginx
+sed -i "s|http://127.0.0.1:9090|$YACD_DEFAULT_BACKEND|" /usr/share/nginx/html/index.html
 exec nginx -g "daemon off;"
