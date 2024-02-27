@@ -1,4 +1,4 @@
-# Clash, with Dashboard
+# Mihomo, with Dashboard
 
 [![Docker Build Status](https://img.shields.io/docker/build/zyao89/clash-with-dashboard.svg)](https://hub.docker.com/r/zyao89/clash-with-dashboard) [![Docker Automated build](https://img.shields.io/docker/automated/zyao89/clash-with-dashboard.svg)](https://hub.docker.com/r/zyao89/clash-with-dashboard) [![Docker Stars](https://img.shields.io/docker/stars/zyao89/clash-with-dashboard.svg)](https://hub.docker.com/r/zyao89/clash-with-dashboard) [![Docker Pulls](https://img.shields.io/docker/pulls/zyao89/clash-with-dashboard.svg)](https://hub.docker.com/r/zyao89/clash-with-dashboard)
 
@@ -16,19 +16,20 @@ zyao89/clash-with-dashboard
 ## Docker Compose
 
 ```yaml
-version: "3"
+version: '3.8'
 
 services:
-  clash:
-    container_name: clash
-    image: zyao89/clash-with-dashboard
+  meta:
+    container_name: mihomo-dashboard
+    image: qwezxcjkl/mihomo-dashboard:latest
     restart: always
     ports:
+      - "5700:80"
+      - "9090:9090"
       - "7890:7890"
       - "7891:7891"
-      - "80:80"
     volumes:
-      - ./config.yaml:/root/.config/clash/config.yaml
+      - ./config:/root/.config/mihomo
 ```
 
 ## Thanks
