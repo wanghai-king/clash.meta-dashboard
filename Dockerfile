@@ -2,13 +2,16 @@ FROM node:lts AS builder
 
 WORKDIR /app
 
-RUN git clone https://github.com/wanghai-king/yacd.git . 
-RUN npm i -g pnpm
-RUN pnpm i 
-RUN pnpm run build
-RUN ls -la /app/public
+RUN git clone https://github.com/wanghai-king/yacd.git . \
+  && npm i -g pnpm \
+  && pnpm i \
+  && pnpm run build
 
 FROM metacubex/mihomo:latest
 
 COPY files/config.yaml /root/.config/mihomo/
 COPY --from=builder /app/public /ui
+
+RUN apk add --no-cache nginx
+COPY nginx-default.conf /etc/nginx/http.d/default.conf
+CMD ["nginx", "-g", "daemon off;"]
