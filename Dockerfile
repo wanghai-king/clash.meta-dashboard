@@ -14,4 +14,6 @@ COPY --from=builder /app/public /ui
 
 RUN apk add --no-cache nginx
 COPY nginx-default.conf /etc/nginx/http.d/default.conf
+
+RUN nginx && sleep 5 && nginx -s quit
 CMD ["nginx", "-g", "daemon off;"]
