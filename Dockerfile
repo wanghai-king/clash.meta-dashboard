@@ -25,4 +25,4 @@ COPY nginx-default.conf /etc/nginx/http.d/default.conf
 
 COPY start-nginx.sh /start-nginx.sh
 RUN chmod +x /start-nginx.sh
-CMD ["/start-nginx.sh"]
+CMD ["./start-nginx.sh"]
