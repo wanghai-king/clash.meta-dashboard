@@ -23,4 +23,6 @@ RUN apk add --no-cache nginx \
 # 复制Nginx配置文件
 COPY nginx-default.conf /etc/nginx/http.d/default.conf
 
-ENTRYPOINT ["/bin/sh", "-c", "exec nginx -g 'daemon off;'"]
+COPY start-both.sh /start-both.sh
+RUN chmod +x /start-both.sh
+ENTRYPOINT ["/start-both.sh"]
