@@ -23,6 +23,6 @@ RUN apk add --no-cache nginx \
 # 复制Nginx配置文件
 COPY nginx-default.conf /etc/nginx/http.d/default.conf
 
-COPY start-both.sh /start-both.sh
-RUN chmod +x /start-both.sh
-ENTRYPOINT ["/start-both.sh"]
+COPY start-nginx.sh /start-nginx.sh
+RUN chmod +x /start-nginx.sh
+ENTRYPOINT ["/start-nginx.sh"]
